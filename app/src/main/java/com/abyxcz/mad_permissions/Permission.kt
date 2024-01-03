@@ -7,41 +7,47 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.shouldShowRationale
 
 
 @ExperimentalPermissionsApi
 @Composable
 fun Permission(
-    permission: String = android.Manifest.permission.CAMERA,
+    permissions: List<String> = listOf(android.Manifest.permission.CAMERA),
     rationale: String = "This permission is important for this app. Please grant the permission.",
     permissionNotAvailableContent: @Composable () -> Unit = { },
     content: @Composable () -> Unit = { }
 ) {
-    val permissionState = rememberPermissionState(permission)
+    val permissionsState = rememberMultiplePermissionsState(permissions = permissions)
 
     LaunchedEffect(key1 = true) {
-        permissionState.launchPermissionRequest()
+        permissionsState.launchMultiplePermissionRequest()
     }
 
-    Rationale(rationale, { permissionState.launchPermissionRequest() } )
+    Rationale(rationale, { permissionsState.launchMultiplePermissionRequest() } )
 
+    if (permissionsState.allPermissionsGranted) {
 
-    when {
-        permissionState.status.isGranted -> {
-            // Location permission granted, continue with the location fetching
-            content
-        }
-        permissionState.status.shouldShowRationale -> {
-            // Explain to the user why we need the permission
-            Rationale(rationale, { permissionState.launchPermissionRequest() } )
-        }
-        !permissionState.status.isGranted -> {
-            // Permission is not granted.
-            // You might want to show a dialog or a message to the user.
-            permissionNotAvailableContent
-            //Rationale()
+        content
+    }
+
+    else {
+        permissionsState.permissions.forEach { perm ->
+            when {
+                perm.status.isGranted -> {
+                    // Permission granted, continue
+                }
+                perm.status.shouldShowRationale -> {
+                    // Explain to the user why we need the permissions
+                    Rationale(rationale, { permissionsState.launchMultiplePermissionRequest() } )
+                }
+                !perm.status.isGranted -> {
+                    // Permission is not granted.
+                    // Might want to show a dialog or a message to the user.
+                    permissionNotAvailableContent
+                }
+            }
         }
     }
 }
