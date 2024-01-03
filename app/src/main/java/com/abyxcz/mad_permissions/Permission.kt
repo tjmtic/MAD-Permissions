@@ -25,8 +25,6 @@ fun Permission(
         permissionsState.launchMultiplePermissionRequest()
     }
 
-    Rationale(rationale, { permissionsState.launchMultiplePermissionRequest() } )
-
     if (permissionsState.allPermissionsGranted) {
 
         content
