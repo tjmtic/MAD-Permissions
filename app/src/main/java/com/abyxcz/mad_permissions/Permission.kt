@@ -27,7 +27,7 @@ fun Permission(
 
     if (permissionsState.allPermissionsGranted) {
 
-        content
+        content()
     }
 
     else {
@@ -38,12 +38,12 @@ fun Permission(
                 }
                 perm.status.shouldShowRationale -> {
                     // Explain to the user why we need the permissions
-                    Rationale(rationale, { permissionsState.launchMultiplePermissionRequest() } )
+                    Rationale(rationale) { permissionsState.launchMultiplePermissionRequest() }
                 }
                 !perm.status.isGranted -> {
                     // Permission is not granted.
                     // Might want to show a dialog or a message to the user.
-                    permissionNotAvailableContent
+                    permissionNotAvailableContent()
                 }
             }
         }
