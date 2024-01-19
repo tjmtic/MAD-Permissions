@@ -26,6 +26,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Greeting(name = "Android")
                     Permission()
+
+                    //Permission { PermissionBox { Permission () } } full example
                 }
             }
         }
