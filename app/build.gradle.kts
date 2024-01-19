@@ -69,4 +69,8 @@ dependencies {
 
     //Accompanist Permissions
     implementation("com.google.accompanist:accompanist-permissions:0.32.0")
+
+    //Coil
+    implementation("io.coil-kt:coil:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 }
